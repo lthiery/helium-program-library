@@ -57,14 +57,6 @@ jobs:
           program: ${{ env.PROGRAM_NAME }}
           program-id: ${{ env.PROGRAM_ID }}
 
-      - name: Push IDL
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ${{ steps.buffer-deploy.outputs.idl-buffer }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: ./.github/actions/buffer-deploy/
         id: buffer-deploy
         with:
@@ -73,6 +65,15 @@ jobs:
           keypair: ${{ secrets.DEPLOYER_KEYPAIR }}
           program-id: ${{ env.PROGRAM_ID }}
           buffer-authority: ${{ secrets.MULTISIG_VAULT }}
+
+
+      - name: Push IDL to Github
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ steps.buffer-deploy.outputs.idl-buffer }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Squads program upgrade
         uses: helium/squads-program-upgrade@v0.3.1
