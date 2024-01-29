@@ -8,7 +8,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - "program-*" # Push events to matching program-*, i.e. program-circuit-breaker-0.0.1
+      - "v*" # Push events to matching program-*, i.e. program-circuit-breaker-0.0.1
 
 jobs:
   release:
