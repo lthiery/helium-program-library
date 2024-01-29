@@ -8,7 +8,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - "v*" # Push events to matching program-*, i.e. program-circuit-breaker-0.0.1
+      - "program*" # Push events to matching program-*, i.e. program-circuit-breaker-0.0.1
 
 jobs:
   release:
@@ -56,6 +56,14 @@ jobs:
         with:
           program: ${{ env.PROGRAM_NAME }}
           program-id: ${{ env.PROGRAM_ID }}
+
+      - name: Push IDL
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ steps.buffer-deploy.outputs.idl-buffer }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: ./.github/actions/buffer-deploy/
         id: buffer-deploy
