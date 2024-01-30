@@ -51,6 +51,14 @@ jobs:
           devnet: false
           program: ${{ env.PROGRAM_NAME }}
 
+      - name: Push IDL to Github
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/idl/${{ env.PROGRAM_NAME }}.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: ./.github/actions/build-verified/
         id: build-verified
         with:
@@ -62,18 +70,9 @@ jobs:
         with:
           network: https://api.mainnet-beta.solana.com
           program: ${{ env.PROGRAM_NAME }}
-          keypair: ${{ secrets.DEPLOYER_KEYPAIR }}
+          #keypair: ${{ secrets.DEPLOYER_KEYPAIR }}
           program-id: ${{ env.PROGRAM_ID }}
           buffer-authority: ${{ secrets.MULTISIG_VAULT }}
-
-
-      - name: Push IDL to Github
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ${{ steps.buffer-deploy.outputs.idl-buffer }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Squads program upgrade
         uses: helium/squads-program-upgrade@v0.3.1
